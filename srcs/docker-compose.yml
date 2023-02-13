@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    db:
+      restart: on-failure
+      env_file: .env
+      build: ./requirements/mariadb
+      image: mariadb
+      container_name: "mariadb"
+      ports:
+        - "3306"
+
+    # nginx:
+    #   build: ./requirements/nginx
+    #   image: nginx
+    #   ports:
+    #     - "443:443"
+    #     - "8080:80"
+    #   depends_on:
+    #     - wordpress
+
+    # wordpress:
+    #   restart: on-failure
+    #   env_file: .env
+    #   build: ./requirements/wordpress
+    #   image: wordpress
+    #   depends_on:
+    #     - db
