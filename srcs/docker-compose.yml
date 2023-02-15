@@ -1,14 +1,28 @@
 version: '3'
 
 services:
-    db:
-      restart: on-failure
-      env_file: .env
-      build: ./requirements/mariadb
-      image: mariadb
-      container_name: "mariadb"
-      ports:
-        - "3306"
+  wordpress:
+    restart: on-failure
+    env_file: .env
+    build: ./requirements/wordpress
+    image: wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - db
+#    networks:
+#     - network
+
+  db:
+    restart: on-failure
+    env_file: .env
+    build: ./requirements/mariadb
+    image: mariadb
+    container_name: "mariadb"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    #networks:
+    #  - network
 
     # nginx:
     #   build: ./requirements/nginx
@@ -19,10 +33,21 @@ services:
     #   depends_on:
     #     - wordpress
 
-    # wordpress:
-    #   restart: on-failure
-    #   env_file: .env
-    #   build: ./requirements/wordpress
-    #   image: wordpress
-    #   depends_on:
-    #     - db
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mj/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mj/data/wordpress
+
+# networks:
+#   network:
+#     driver: bridge

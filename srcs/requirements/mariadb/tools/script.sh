@@ -5,7 +5,7 @@ MY_PWORD="helloworld"
 ROOT_PWORD="rootworld"
 
 echo "Config mariadb..."
-if [ ! -d "/var/lib/mysql/mysql" ]; then
+if [ ! -d "/var/lib/mysql/wordpress" ]; then
     service mysql start
     echo "CREATE"
     echo "CREATE DATABASE IF NOT EXISTS wordpress;" | mysql

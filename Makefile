@@ -1,5 +1,5 @@
 FILE = ./srcs/docker-compose.yml
-MARIA = ~/42/Inception/srcs/requirements/mariadb
+MARIA = ~/42/Inception/Inception/srcs/requirements/mariadb
 NGINX = ./srcs/requirements/nginx
 WORD = ./srcs/requirements/wordpress
 PORT = 3306
@@ -39,8 +39,8 @@ run_n:
 run_w:
 	@sudo docker-compose -f $(FILE) run --name wordpress -p $(PORT):$(PORT) wordpress
 run_m:
-	@sudo docker run -it mariadb /bin/bash
-#	@sudo docker-compose -f $(FILE) run --name mariadb -p $(PORT):$(PORT) mariadb
+#	@sudo docker run -it mariadb /bin/bash
+	@sudo docker-compose -f $(FILE) run --name mariadb -p $(PORT):$(PORT) mariadb
 
 run_n-d:
 	@sudo docker-compose -f $(FILE) run --name nginx -d -p $(PORT):$(PORT) nginx
@@ -71,8 +71,9 @@ stop_m:
 	@sudo docker-compose -f $(FILE) stop mariadb
 
 clean:
-	@sudo rm -rf /home/masboula42/mariadb/*
+	@sudo rm -rf /home/mj/data/mariadb/*
 	@sudo make down
 	@sudo docker system prune
+	@sudo make destroy
 
 .PHONY: build run run-it stop
