@@ -1,15 +1,13 @@
 #!/bin/bash
 
-MY_USER="mysql"
-MY_PWORD="helloworld"
-DB_NAME="wordpress"
 
-rm -rf wp-config.php
+#rm -rf wp-config.php
+rm -rf /var/www/html/wp-config.php
 echo "Downloading wp"
-wp-cli --allow-root core download
+wp --allow-root core download
 echo "Config wp"
-wp-cli --allow-root config create --dbname=DB_NAME --dbuser=MY_USER --dbpass=MY_PWORD
+wp --allow-root config create --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --path="/var/www/html"
 echo "install"
-wp-cli --allow-root core install --url='localhost' --title='Inception' --admin_user='mmahias' --admin_password='mworld' --admin_email='mmahias@42.fr'
+wp --allow-root core install --url='localhost' --title='Inception' --admin_user='mmahias' --admin_password='mworld' --admin_email='mmahias@42.fr' --path="/var/www/html"
 
 exec php-fpm7.3 -F

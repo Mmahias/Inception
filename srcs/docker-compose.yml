@@ -1,38 +1,45 @@
 version: '3'
 
 services:
+  nginx:
+    restart: on-failure
+    build: ./requirements/nginx
+    image: nginx
+    container_name: "nginx"
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+     - network
+  
   wordpress:
     restart: on-failure
-    env_file: .env
+    env_file: 
+      - .env
     build: ./requirements/wordpress
     image: wordpress
+    container_name: "wordpress"
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
       - db
-#    networks:
-#     - network
+    networks:
+    - network
 
   db:
     restart: on-failure
-    env_file: .env
+    env_file: 
+      - .env
     build: ./requirements/mariadb
     image: mariadb
     container_name: "mariadb"
     volumes:
       - mariadb_data:/var/lib/mysql
-    #networks:
-    #  - network
-
-    # nginx:
-    #   build: ./requirements/nginx
-    #   image: nginx
-    #   ports:
-    #     - "443:443"
-    #     - "8080:80"
-    #   depends_on:
-    #     - wordpress
-
+    networks:
+     - network
 
 volumes:
   mariadb_data:
@@ -47,7 +54,6 @@ volumes:
       type: none
       o: bind
       device: /home/mj/data/wordpress
-
-# networks:
-#   network:
-#     driver: bridge
+networks:
+  network:
+    driver: bridge
