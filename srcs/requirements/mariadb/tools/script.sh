@@ -10,15 +10,17 @@ if [ ! -d "/var/lib/mysql/wordpress" ]; then
     echo "FLUSH"
     echo "FLUSH PRIVILEGES;" | mysql
     echo "SET"
-    echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');" | mysql 
+    echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');" | mysql -u root -p$MYSQL_ROOT_PASSWORD
     echo "SET/SERVICE"
-    service mysql stop
+    #service mysql stop
 fi
 rm /etc/mysql/my.cnf && touch /etc/mysql/my.cnf
 echo "[mysqld]" >> /etc/mysql/my.cnf 
+echo "skip-grant-tables" >> /etc/mysql/my.cnf
 echo "bind-address=0.0.0.0" >> /etc/mysql/my.cnf
 
-echo "SERVICE"
+echo "SERVICE STOP"
+service mysql stop
 
 mysqld --user=mysql --console
 
