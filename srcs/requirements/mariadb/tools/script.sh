@@ -12,7 +12,6 @@ if [ ! -d "/var/lib/mysql/wordpress" ]; then
     echo "SET"
     echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');" | mysql 
     echo "SET/SERVICE"
-    sleep 1
     service mysql stop
 fi
 rm /etc/mysql/my.cnf && touch /etc/mysql/my.cnf

@@ -1,10 +1,10 @@
-version: '3'
+version: "2.1"
 
 services:
   nginx:
     restart: on-failure
     build: ./requirements/nginx
-    image: nginx
+    image: nginx:test
     container_name: "nginx"
     ports:
       - "443:443"
@@ -15,15 +15,20 @@ services:
     networks:
      - network
 
-  db:
+  mariadb:
     restart: on-failure
     env_file: 
       - .env
     build: ./requirements/mariadb
-    image: mariadb
+    image: mariadb:test
     container_name: "mariadb"
     volumes:
       - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     networks:
      - network
   
@@ -32,12 +37,13 @@ services:
     env_file: 
       - .env
     build: ./requirements/wordpress
-    image: wordpress
+    image: wordpress:latest
     container_name: "wordpress"
     volumes:
       - wordpress_data:/var/www/html
-    depends_on:
-      - db
+    depends_on: 
+      mariadb:
+        condition: service_healthy
     networks:
     - network
 
